@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KAZ Development | Digital Pioneers. Where ideas meet innovation.</title>
+    <meta name="description" content="KAZ Development is a visionary Egyptian technology company specializing in next-generation web, mobile app, and UI/UX design. Cyber-Corporate pioneers in digital product creation.">
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Inter font for clean typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Define custom colors and font for Tailwind */
+        :root {
+            --color-cyan-neon: #00FFFF; /* Primary Futuristic Accent */
+            --color-gold-accent: #FFD700; /* Secondary CTA Accent */
+        }
+
+        /* Custom Tailwind Configuration */
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'cyan-neon': 'var(--color-cyan-neon)',
+                        'gold-accent': 'var(--color-gold-accent)',
+                        'bg-dark': '#000000', /* Deepest black for futuristic feel */
+                        'bg-surface': '#080808', /* Dark surface color for cards */
+                    },
+                    boxShadow: {
+                        /* Multi-layered shadow for a deep neon glow effect */
+                        'futuristic': '0 0 10px rgba(0, 255, 255, 0.4), 0 0 20px rgba(0, 255, 255, 0.2), 0 0 30px rgba(0, 255, 255, 0.1)',
+                        'gold-glow': '0 0 8px rgba(255, 215, 0, 0.5), 0 0 15px rgba(255, 215, 0, 0.3)',
+                    },
+                    keyframes: {
+                        glitch: {
+                            '0%, 100%': { opacity: '1' },
+                            '10%': { transform: 'translateX(2px) skewX(2deg)' },
+                            '20%': { transform: 'translateX(-2px) skewX(-2deg)' },
+                            '30%': { transform: 'translateX(4px) skewX(4deg)' },
+                            '40%': { transform: 'translateX(-4px) skewX(-4deg)' },
+                            '50%': { transform: 'translateX(2px) skewX(2deg)' },
+                            '60%': { transform: 'none' },
+                        }
+                    },
+                }
+            }
+        }
+        
+        /* Base Styles */
+        body {
+            background-color: #000000;
+            color: #E5E7EB; /* Light grey for body text */
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+        }
+
+        /* Sticky Header Transition */
+        .header-scrolled {
+            background-color: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+        }
+
+        /* Glitch Animation for Tagline (used via JS) */
+        .tagline-glitch {
+            animation: glitch 0.5s infinite alternate;
+        }
+
+        /* Scroll Entrance Animation (quick, technical slide-in) */
+        .animate-enter {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 700ms ease-out, transform 700ms ease-out;
+        }
+
+        .animate-enter.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Glowing Input Effect */
+        .glowing-input:focus {
+            border-color: var(--color-cyan-neon);
+            box-shadow: 0 0 0 1px var(--color-cyan-neon), 0 0 15px rgba(0, 255, 255, 0.4);
+        }
+
+        /* Project Card Hover Effect */
+        .project-card {
+            transition: all 400ms cubic-bezier(0.2, 0.6, 0.4, 1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--shadow-futuristic);
+            border-color: var(--color-cyan-neon);
+        }
+
+        /* Unique Services Grid Item Styling */
+        .service-item {
+            border: 1px solid #1a1a1a;
+            border-radius: 0.75rem;
+            transition: all 300ms;
+        }
+        
+        .service-item:hover {
+            border-color: var(--color-gold-accent);
+            background-color: #0d0d0d;
+        }
+        
+        /* Background Grid/Matrix Effect (Hero) */
+        #hero-section {
+            position: relative;
+            overflow: hidden;
+            height: 100vh;
+        }
+        
+        #hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* Subtle grid pattern for the matrix feel */
+            background-image: linear-gradient(to right, rgba(0, 255, 255, 0.05) 1px, transparent 1px), 
+                              linear-gradient(to bottom, rgba(0, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            opacity: 0.5;
+            z-index: 0;
+            animation: pulseGrid 15s infinite alternate;
+        }
+        
+        @keyframes pulseGrid {
+            from { background-position: 0 0; }
+            to { background-position: 50px 50px; }
+        }
+    </style>
+</head>
+<body class="bg-bg-dark text-gray-200 font-sans antialiased">
+
+    <!-- 1. Navigation Bar (Sticky Header) -->
+    <header id="main-header" class="fixed top-0 left-0 w-full z-50 py-4 transition-all duration-300">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <!-- Logo - Geometric/Monospace Vibe -->
+            <a href="#hero-section" class="text-2xl font-black tracking-widest text-cyan-neon hover:text-white transition-colors uppercase font-mono">
+                KAZ_DEV<span class="text-white">_</span>
+            </a>
+            
+            <!-- Desktop Navigation - Minimal -->
+            <nav class="hidden md:flex space-x-10 font-mono">
+                <a href="#about" class="nav-link text-sm font-medium uppercase text-gray-400 hover:text-cyan-neon transition-colors tracking-widest">About</a>
+                <a href="#projects" class="nav-link text-sm font-medium uppercase text-gray-400 hover:text-cyan-neon transition-colors tracking-widest">Modules</a>
+                <a href="#services" class="nav-link text-sm font-medium uppercase text-gray-400 hover:text-cyan-neon transition-colors tracking-widest">Services</a>
+                <a href="#contact" class="nav-link text-sm font-medium uppercase border-b border-cyan-neon text-cyan-neon transition-colors tracking-widest pb-1">Contact</a>
+            </nav>
+            
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-button" class="md:hidden text-cyan-neon focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        
+        <!-- 1. Landing Page / Hero Section -->
+        <section id="hero-section" class="flex items-center justify-center text-center relative">
+            <div class="z-10 px-4 max-w-4xl pt-40 pb-20">
+                <!-- Glitch/Typing Tagline -->
+                <h1 id="tagline" class="text-5xl md:text-7xl lg:text-8xl font-black mb-6 tracking-wide text-white">
+                    <span class="text-cyan-neon font-mono">Loading...</span>
+                </h1>
+                
+                <p class="text-lg md:text-xl text-gray-400 mb-10 animate-enter" style="transition-delay: 100ms;">
+                    KAZ Development is a next-generation technology studio. We engineer intelligent, elegant, and impactful digital products.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-8 animate-enter" style="transition-delay: 200ms;">
+                    <a href="#projects" class="inline-block px-8 py-3 rounded-full text-lg font-semibold bg-cyan-neon text-black hover:bg-white hover:shadow-futuristic transition-all duration-300 uppercase tracking-wider">
+                        Explore Modules
+                    </a>
+                    <a href="#contact" class="inline-block px-8 py-3 rounded-full text-lg font-semibold border-2 border-gold-accent text-gold-accent hover:bg-gold-accent hover:text-black transition-all duration-300 uppercase tracking-wider">
+                        Initiate Contact
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. About Us Section -->
+        <section id="about" class="py-20 md:py-32 container mx-auto px-6">
+            <h2 class="text-4xl md:text-5xl font-extrabold mb-16 text-center text-white animate-enter">
+                System <span class="text-cyan-neon">// ORIGIN</span>
+            </h2>
+            <div class="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                
+                <div class="lg:pr-10 animate-enter" style="transition-delay: 100ms;">
+                    <p class="text-xl text-gray-400 leading-relaxed mb-8 border-l-4 border-cyan-neon pl-4">
+                        KAZ Development is where **bold ideas evolve into digital realities.** Founded by three Egyptian students driven by passion and vision, we specialize in building intelligent, elegant, and impactful digital products. We believe in merging creativity with technical precision — crafting experiences that don’t just work, but inspire.
+                    </p>
+                    <p class="text-base text-gray-500 font-mono">
+                        // MISSION: REVOLUTIONIZE DIGITAL LANDSCAPE
+                    </p>
+                </div>
+
+                <!-- Founders Grid -->
+                <div class="grid grid-cols-2 gap-6 animate-enter" style="transition-delay: 300ms;">
+                    <!-- Founder 1: Khalifa -->
+                    <div class="p-4 rounded-lg bg-bg-surface border border-gray-800 text-center">
+                        <h3 class="text-xl font-bold text-cyan-neon">Ziyad</h3>
+                        <p class="text-sm font-mono text-gray-400">CEO & Founder</p>
+                    </div>
+                    <!-- Founder 2: Ziyad -->
+                    <div class="p-4 rounded-lg bg-bg-surface border border-gray-800 text-center">
+                        <h3 class="text-xl font-bold text-cyan-neon">Khalifa</h3>
+                        <p class="text-sm font-mono text-gray-400">CFO & CMO, Founder</p>
+                    </div>
+                    <!-- Founder 3: Ahmed -->
+                    <div class="p-4 rounded-lg bg-bg-surface border border-gray-800 col-span-2 text-center">
+                        <h3 class="text-xl font-bold text-cyan-neon">Ahmed</h3>
+                        <p class="text-sm font-mono text-gray-400">CTO & Founder</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 3. Our Projects / Portfolio -->
+        <section id="projects" class="py-20 md:py-32 container mx-auto px-6 bg-bg-surface">
+            <h2 class="text-4xl md:text-5xl font-extrabold mb-16 text-center text-white animate-enter">
+                Deployed <span class="text-cyan-neon">Modules</span>
+            </h2>
+            <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10">
+                
+                <!-- Project 1: Salaح -->
+                <div class="project-card p-8 rounded-xl bg-black transition-all duration-300 animate-enter">
+                    <div class="flex items-start mb-4">
+                        <div class="w-10 h-10 flex items-center justify-center bg-cyan-neon/20 rounded-full mr-4 shadow-futuristic/30">
+                            <!-- Icon: Hex Wrench/Fix -->
+                            <svg class="w-6 h-6 text-cyan-neon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.941 3.31 1.07 1.28 2.373a1.724 1.724 0 00.081 2.571c1.543.941 1.543 3.39 0 4.331a1.724 1.724 0 00-.07 2.569c-2.03 1.303-3.033 3.31 1.28 2.373a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.941-3.31-1.07-1.28-2.373a1.724 1.724 0 00-.081-2.571c-1.543-.941-1.543-3.39 0-4.331a1.724 1.724 0 00.07-2.569c2.03-1.303 3.033-3.31 1.28-2.373a1.724 1.724 0 002.573-1.066z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        </div>
+                        <h3 class="text-3xl font-bold text-white uppercase tracking-wider mt-1">SALA<span class="text-cyan-neon">H</span></h3>
+                    </div>
+                    <p class="text-gray-400 mb-6 font-mono text-sm leading-relaxed">
+                        // PRODUCT LIFECYCLE MANAGEMENT SYSTEM
+                        <br> A comprehensive ecosystem platform where users can maintain, fix, assemble, and disassemble products across 10+ categories. Real-time diagnostic and repair module.
+                    </p>
+                    <a href="#" class="text-gold-accent font-semibold hover:text-white transition-colors flex items-center uppercase font-mono text-sm">
+                        ACCESS DOCUMENTATION 
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </a>
+                </div>
+
+                <!-- Project 2: Khatwetak -->
+                <div class="project-card p-8 rounded-xl bg-black transition-all duration-300 animate-enter" style="transition-delay: 150ms;">
+                    <div class="flex items-start mb-4">
+                        <div class="w-10 h-10 flex items-center justify-center bg-gold-accent/20 rounded-full mr-4 shadow-gold-glow/30">
+                            <!-- Icon: Pathway/Guidance -->
+                            <svg class="w-6 h-6 text-gold-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10l9-2 9 2M3 14l9-2 9 2M3 18l9-2 9 2"></path></svg>
+                        </div>
+                        <h3 class="text-3xl font-bold text-white uppercase tracking-wider mt-1">KHATWE<span class="text-gold-accent">TAK</span></h3>
+                    </div>
+                    <p class="text-gray-400 mb-6 font-mono text-sm leading-relaxed">
+                        // SMART EDUCATIONAL PATHWAY PLATFORM
+                        <br> A smart guidance platform using AI to help students find suitable universities, programs, and educational pathways in Egypt. Optimized for future career success.
+                    </p>
+                    <a href="#" class="text-gold-accent font-semibold hover:text-white transition-colors flex items-center uppercase font-mono text-sm">
+                        ACCESS DOCUMENTATION 
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Services Section -->
+        <section id="services" class="py-20 md:py-32 container mx-auto px-6">
+            <h2 class="text-4xl md:text-5xl font-extrabold mb-16 text-center text-white animate-enter">
+                Core <span class="text-gold-accent">Processes</span>
+            </h2>
+            <div class="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <!-- Service 1: Website Development -->
+                <div class="service-item p-6 bg-bg-surface hover:shadow-futuristic/20 animate-enter">
+                    <h3 class="text-xl font-bold mb-2 text-cyan-neon">01. WEB DEV</h3>
+                    <p class="text-gray-400 text-sm font-mono tracking-tight">Full-stack system architecture and deployment for scalable web applications.</p>
+                </div>
+
+                <!-- Service 2: Mobile App Development -->
+                <div class="service-item p-6 bg-bg-surface hover:shadow-futuristic/20 animate-enter" style="transition-delay: 50ms;">
+                    <h3 class="text-xl font-bold mb-2 text-cyan-neon">02. MOBILE APP</h3>
+                    <p class="text-gray-400 text-sm font-mono tracking-tight">Native and hybrid application engineering for iOS and Android platforms.</p>
+                </div>
+
+                <!-- Service 3: UI/UX Design -->
+                <div class="service-item p-6 bg-bg-surface hover:shadow-futuristic/20 animate-enter" style="transition-delay: 100ms;">
+                    <h3 class="text-xl font-bold mb-2 text-cyan-neon">03. UI/UX DESIGN</h3>
+                    <p class="text-gray-400 text-sm font-mono tracking-tight">Precision-driven interface design focused on seamless user flow and conversion.</p>
+                </div>
+
+                <!-- Service 4: SEO Optimization -->
+                <div class="service-item p-6 bg-bg-surface hover:shadow-futuristic/20 animate-enter" style="transition-delay: 150ms;">
+                    <h3 class="text-xl font-bold mb-2 text-cyan-neon">04. SEO / ASO</h3>
+                    <p class="text-gray-400 text-sm font-mono tracking-tight">Search Engine and App Store Optimization for maximum digital visibility and growth.</p>
+                </div>
+
+                <!-- Service 5: Branding & Digital Strategy -->
+                <div class="service-item p-6 bg-bg-surface hover:shadow-futuristic/20 animate-enter" style="transition-delay: 200ms;">
+                    <h3 class="text-xl font-bold mb-2 text-cyan-neon">05. STRATEGY</h3>
+                    <p class="text-gray-400 text-sm font-mono tracking-tight">Defining corporate digital identity, market positioning, and expansion strategies.</p>
+                </div>
+                
+                <!-- Placeholder / Call to Action -->
+                <div class="service-item p-6 bg-bg-surface flex items-center justify-center border-gold-accent/50 border-dashed animate-enter" style="transition-delay: 250ms;">
+                    <a href="#contact" class="text-gold-accent hover:text-white font-mono uppercase text-sm tracking-widest">
+                        // INIT PROJECT BRIEF
+                    </a>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 5. Corporate Bio Section -->
+        <section class="py-20 md:py-24 container mx-auto px-6 bg-black">
+            <div class="max-w-4xl mx-auto text-center p-8 rounded-xl border-2 border-cyan-neon/30 bg-bg-surface animate-enter">
+                <blockquote class="text-2xl italic font-light text-gray-300 leading-relaxed">
+                    “KAZ Development is a forward-thinking technology company committed to transforming innovative concepts into exceptional digital products. By combining technical mastery with strategic creativity, we deliver solutions that empower businesses and elevate user experiences. Our approach is grounded in **precision, elegance, and relentless innovation**.”
+                </blockquote>
+            </div>
+        </section>
+
+        <!-- 6. Contact / Get in Touch -->
+        <section id="contact" class="py-20 md:py-32 container mx-auto px-6">
+            <h2 class="text-4xl md:text-5xl font-extrabold mb-12 text-center text-white animate-enter">
+                <span class="text-cyan-neon">DATA</span>_INPUT
+            </h2>
+            <div class="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
+                
+                <!-- Contact Form -->
+                <form class="p-8 rounded-xl bg-bg-surface border border-gray-900 animate-enter" style="transition-delay: 100ms;">
+                    <h3 class="text-xl font-mono mb-6 text-cyan-neon">// REQUEST FOR PROPOSAL</h3>
+                    
+                    <div class="mb-4">
+                        <label for="name" class="block text-xs font-mono text-gray-400 mb-2">FULL NAME</label>
+                        <input type="text" id="name" name="name" required
+                            class="glowing-input w-full p-3 rounded-md bg-black border border-gray-700 text-white placeholder-gray-600 focus:outline-none transition-all duration-300">
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="email" class="block text-xs font-mono text-gray-400 mb-2">EMAIL ADDRESS</label>
+                        <input type="email" id="email" name="email" required
+                            class="glowing-input w-full p-3 rounded-md bg-black border border-gray-700 text-white placeholder-gray-600 focus:outline-none transition-all duration-300">
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label for="message" class="block text-xs font-mono text-gray-400 mb-2">PROJECT BRIEF</label>
+                        <textarea id="message" name="message" rows="4" required
+                            class="glowing-input w-full p-3 rounded-md bg-black border border-gray-700 text-white placeholder-gray-600 focus:outline-none transition-all duration-300"></textarea>
+                    </div>
+                    
+                    <button type="submit"
+                        class="w-full px-6 py-3 rounded-md text-base font-mono bg-gold-accent text-black hover:bg-white transition-all duration-300 uppercase tracking-widest hover:shadow-gold-glow">
+                        TRANSMIT DATA
+                    </button>
+                    <!-- Success/Error message box -->
+                    <div id="form-message" class="mt-4 text-center text-sm font-mono" style="opacity: 0;"></div>
+                </form>
+
+                <!-- Location & Socials -->
+                <div class="space-y-6 animate-enter" style="transition-delay: 200ms;">
+                    <!-- Location Card -->
+                    <div class="p-6 rounded-xl bg-bg-surface border border-gray-900 h-48 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-xl font-mono mb-2 text-gold-accent">// LOCATION PIN</h3>
+                            <p class="text-gray-300 mb-1">HQ: Egypt (Cairo/Giza)</p>
+                            <p class="text-sm text-gray-500 font-mono tracking-tighter">GLOBAL OPERATIONS INTERFACE</p>
+                        </div>
+                        <div class="h-24 w-full rounded-lg mt-4 border border-gray-800 map-placeholder relative overflow-hidden">
+                             <!-- Grayscale Map Placeholder with a cyan border for futuristic look -->
+                            <div class="absolute inset-0 border-4 border-cyan-neon/20"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Social Links -->
+                    <div class="p-6 rounded-xl bg-bg-surface border border-gray-900">
+                        <h3 class="text-xl font-mono mb-4 text-gold-accent">// SOCIAL ACCESS</h3>
+                        <div class="flex space-x-6">
+                            <!-- Placeholder Icons for Socials -->
+                            <a href="#" class="text-gray-400 hover:text-cyan-neon transition-colors">
+                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M22.46 6c-.77.35-1.59.58-2.45.69.88-.53 1.56-1.37 1.88-2.38-.82.49-1.74.85-2.73 1.05C18.6 4.23 17.5 4 16.35 4c-2.38 0-4.31 1.93-4.31 4.31 0 .34.04.67.11.99-3.58-.18-6.75-1.89-8.88-4.48-.38.64-.59 1.39-.59 2.19 0 1.49.76 2.8 1.91 3.56-.7-.02-1.35-.21-1.92-.53v.05c0 2.09 1.49 3.83 3.47 4.22-.36.1-.74.15-1.13.15-.27 0-.53-.03-.78-.08.55 1.72 2.15 2.97 4.05 3.09-1.48 1.16-3.34 1.85-5.36 1.85-.35 0-.69-.02-1.02-.06 1.92 1.23 4.19 1.95 6.64 1.95 8 0 12.39-6.62 12.39-12.39 0-.19-.01-.39-.02-.58.85-.62 1.58-1.4 2.15-2.28z"/></svg>
+                            </a>
+                            <a href="#" class="text-gray-400 hover:text-cyan-neon transition-colors">
+                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.904 3.655 8.973 8.441 9.872v-6.936H7.904v-2.936h2.537V9.77c0-2.518 1.537-3.896 3.784-3.896 1.077 0 2.004.08 2.274.115v2.54h-1.503c-1.213 0-1.446.577-1.446 1.423v1.85h2.903l-.47 2.936h-2.433v6.936C18.345 20.973 22 16.904 22 12c0-5.523-4.477-10-10-10z" clip-rule="evenodd" /></svg>
+                            </a>
+                            <a href="#" class="text-gray-400 hover:text-cyan-neon transition-colors">
+                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 5.093 3.69 9.351 8.528 9.873.619.113.843-.266.843-.591v-2.092c-3.664.793-4.43-1.77-4.43-1.77-.599-1.52-1.464-1.92-1.464-1.92-1.196-.816.091-.799.091-.799 1.32.093 2.016 1.353 2.016 1.353 1.173 2.013 3.076 1.43 3.821 1.096.119-.854.457-1.43 1.25-1.751-3.415-.387-7.005-1.708-7.005-7.616 0-1.684.6-3.058 1.583-4.136-.157-.387-.686-1.959.149-4.088 0 0 1.288-.413 4.22.95 1.222-.338 2.538-.507 3.85-.514 1.312.007 2.628.176 3.85.514 2.932-1.363 4.22-.95 4.22-.95.835 2.13.306 3.701.15 4.088.983 1.078 1.583 2.452 1.583 4.136 0 5.925-3.594 7.224-7.018 7.607.472.408.895 1.213.895 2.443v3.584c0 .325.225.706.845.592C19.31 21.35 23 17.093 23 12c0-5.523-4.477-10-10-10z" clip-rule="evenodd" /></svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 7. Footer -->
+    <footer class="bg-bg-surface py-10 border-t border-cyan-neon/10">
+        <div class="container mx-auto px-6 text-center">
+            <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 text-sm text-gray-400">
+                <!-- Copyright -->
+                <p class="font-mono">&copy; 2025 KAZ Development — Where ideas meet innovation. All rights reserved. <span class="text-cyan-neon">System Status: Nominal.</span></p>
+                
+                <!-- Links -->
+                <div class="space-x-6 font-mono">
+                    <a href="#about" class="hover:text-cyan-neon transition-colors">/About</a>
+                    <a href="#projects" class="hover:text-cyan-neon transition-colors">/Modules</a>
+                    <a href="#contact" class="hover:text-cyan-neon transition-colors">/Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <script>
+        (function() {
+            // --- Global Variables ---
+            const header = document.getElementById('main-header');
+            const taglineElement = document.getElementById('tagline');
+            const sections = document.querySelectorAll('section');
+            const form = document.querySelector('#contact form');
+            const formMessage = document.getElementById('form-message');
+            const fullTagline = 'Where ideas meet innovation.';
+            let taglineIndex = 0;
+            const typingSpeed = 70; // ms
+            const glitchDuration = 500; // ms
+
+            // --- Digital Typing/Glitch Effect ---
+            const typeTagline = (callback) => {
+                taglineElement.innerHTML = `<span class="text-cyan-neon font-mono">_</span>`; // Reset with cursor
+                taglineIndex = 0;
+
+                const typeInterval = setInterval(() => {
+                    if (taglineIndex < fullTagline.length) {
+                        const nextChar = fullTagline.charAt(taglineIndex);
+                        const currentText = taglineElement.textContent.slice(0, -1); // Remove cursor
+                        
+                        // Simulate Glitch on spaces and key words
+                        if (nextChar === ' ' || nextChar.toLowerCase() === 'i' || nextChar.toLowerCase() === 'o') {
+                             taglineElement.innerHTML = `<span class="tagline-glitch">${currentText}${nextChar}</span><span class="text-cyan-neon font-mono">_</span>`;
+                        } else {
+                            taglineElement.innerHTML = `${currentText}${nextChar}<span class="text-cyan-neon font-mono">_</span>`;
+                        }
+
+                        taglineIndex++;
+                    } else {
+                        clearInterval(typeInterval);
+                        taglineElement.innerHTML = fullTagline; // Final text
+                        if (callback) callback();
+                    }
+                }, typingSpeed);
+            };
+
+            // --- Sticky Header & Scroll Logic ---
+            const toggleStickyHeader = () => {
+                if (window.scrollY > 50) {
+                    header.classList.add('header-scrolled');
+                } else {
+                    header.classList.remove('header-scrolled');
+                }
+            };
+
+            // --- Smooth Scroll for Navigation ---
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - header.offsetHeight,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
+            // --- Intersection Observer for Staggered Entrance Animations ---
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const targetElements = entry.target.querySelectorAll('.animate-enter, .project-card, .service-item');
+                        
+                        targetElements.forEach((el, index) => {
+                            // Apply staggered delay using the CSS transition-delay property
+                            const delay = parseFloat(el.style.transitionDelay || 0);
+                            el.style.transitionDelay = `${delay + (index * 50)}ms`;
+                            el.classList.add('in-view');
+                            // We don't unobserve here so the animation resets on scroll if needed, 
+                            // but since the items are children of the section, observing the section is enough.
+                        });
+                        
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all sections (except hero, which has its own animation)
+            sections.forEach(el => {
+                if (el.id !== 'hero-section') {
+                    observer.observe(el);
+                }
+            });
+
+            // --- Simple Form Submission Handler ---
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                // Show a technical success message
+                formMessage.textContent = '// TRANSMISSION SUCCESSFUL. KAZ WILL INITIATE CALLBACK PROTOCOL.';
+                formMessage.classList.add('text-cyan-neon');
+                formMessage.style.opacity = '1';
+                
+                // Clear the form and hide message after 5 seconds
+                form.reset();
+                setTimeout(() => {
+                    formMessage.style.opacity = '0';
+                    formMessage.textContent = '';
+                }, 5000);
+            });
+
+
+            // --- Initialize Events ---
+            window.addEventListener('scroll', toggleStickyHeader);
+            window.addEventListener('load', () => {
+                toggleStickyHeader(); 
+                typeTagline(); // Start the hero animation on load
+            });
+            
+        })();
+    </script>
+
+</body>
+</html>
